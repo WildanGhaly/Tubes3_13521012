@@ -19,7 +19,15 @@ function App() {
     return (
         <div className="container">
             <div className="sidebar">
-                <button className="my-button"> + New Chat </button>
+                <div className="sidebar-content">
+                    <button className="my-button"> + New Chat </button>
+                </div>
+                <div className="user-radio-button">
+                    <input type="radio" id="kmp" name="algorithm" value="kmp" />
+                    <label htmlFor="kmp">KMP</label>
+                    <input type="radio" id="bm" name="algorithm" value="bm" />
+                    <label htmlFor="bm">BM</label>
+                </div>
             </div>
             <div className="content">
                 <div className="user-text-input">
