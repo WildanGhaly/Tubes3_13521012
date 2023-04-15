@@ -1,0 +1,28 @@
+.sidebar {
+    width: 17.52%;
+    background-color: #202123;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    transform-origin: left top;
+}
+
+.sidebar-content {
+    transform: scale(1);
+    transform-origin: top left;
+}
+
+.my-button {
+    font-size: 20px;
+    padding: 12px 65px;
+    background-color: #202123;
+    color: #fff;
+    border: 1px solid white;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.my-button:hover {
+    background-color: #303f9f;
+}
