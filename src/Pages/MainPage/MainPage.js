@@ -1,5 +1,6 @@
 import Contents from "../Contents/Contents";
 import SideBar from "../SideBar/SideBar";
+import "./MainPage.css";
 
 function MainPage() {
   return (
