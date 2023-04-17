@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import "./Radio.css";
 
+function getSelectedValue() {
+  const checkedRadio = document.querySelector('input[name="algorithm"]:checked');
+  if (checkedRadio) {
+    return checkedRadio.value;
+  }
+}
+
+export { getSelectedValue };
+
 function Radio() {
-  const [selectedValue, setSelectedValue] = useState(null);
+  const [selectedValue, setSelectedValue] = useState("kmp");
 
   useEffect(() => {
     const checkedRadio = document.querySelector('input[name="algorithm"]:checked');
