@@ -5,6 +5,7 @@
     justify-content: flex-start;
     align-items: flex-start;
     transform-origin: left top;
+    overflow: auto;
 }
 
 .sidebar-content {
@@ -14,13 +15,15 @@
 
 .my-button {
     font-size: 20px;
-    padding: 12px 65px;
+    padding: 12px;
     background-color: #202123;
     color: #fff;
     border: 1px solid white;
     border-radius: 10px;
     cursor: pointer;
     margin: 10px;
+    box-sizing: border-box;
+    width: 233px;
 }
 
 .my-button:hover {
