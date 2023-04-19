@@ -12,7 +12,7 @@ function SideBar() {
   const newButtons = [];
 
   for (let i = 0; i < buttonCount; i++) {
-    newButtons.push(<button key={i} className="my-button">Button {i + 1}</button>);
+    newButtons.push(<button key={i} className="my-button">Chat {i + 1}</button>);
   }
 
   return (
