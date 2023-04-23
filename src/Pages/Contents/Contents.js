@@ -5,18 +5,25 @@ import './Contents.css';
 
 function Contents() {
   const [messages, setMessages] = useState([]);
+  const [inputValue, setInputValue] = useState("");
   const [beMessages, setBeMessages] = useState(""); // Backend messages
 
   useEffect(() => {
-    fetch("http://localhost:8000/message")
+    fetch(`http://localhost:8000/message/${getSelectedValue()}/${inputValue}`)
       .then((res) => res.json())
       .then((data) => setBeMessages(data.message));
-  }, []);
-  
+  }, [inputValue]);
+
+  useEffect(() => {
+    if (beMessages !== "") {
+      setMessages([...messages, { text: inputValue, isUser: true }, { text: beMessages, isUser: false }]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [beMessages]);
+
   function handleSend(message) {
-    setMessages([...messages, { text: message, isUser: true }]);
-    /* Call backend here */
-    setMessages([...messages, { text: message, isUser: true }, { text: beMessages, isUser: false }]);
+    setInputValue(message);
+    // setMessages([...messages, { text: message, isUser: true }]);
   }
 
   return (
