@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextInput from '../../Components/TextInput';
+import { getSelectedValue } from "../../Components/Radio";
 import './Contents.css';
 
 function Contents() {
   const [messages, setMessages] = useState([]);
+  const [beMessages, setBeMessages] = useState(""); // Backend messages
 
+  useEffect(() => {
+    fetch("http://localhost:8000/message")
+      .then((res) => res.json())
+      .then((data) => setBeMessages(data.message));
+  }, []);
+  
   function handleSend(message) {
     setMessages([...messages, { text: message, isUser: true }]);
     /* Call backend here */
-    setMessages([...messages, { text: message, isUser: true }, { text: "Ya Ndak Tahu", isUser: false }]);
+    setMessages([...messages, { text: message, isUser: true }, { text: beMessages, isUser: false }]);
   }
 
   return (
