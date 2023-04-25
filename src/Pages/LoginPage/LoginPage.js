@@ -1,10 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './LoginPage.css';
 
 function LoginPage(props) {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  function handleRegister(username, password) {
+    fetch(`http://localhost:8000/register/${username}/${password}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          alert('Register success');
+        } else {
+          alert('Username already exists');
+        }
+      });
+  }
+
+  function handleLogin(username, password) {
+    fetch(`http://localhost:8000/login/${username}/${password}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          alert('Login success');
+          props.onLogin(true);
+        } else {
+          alert('Invalid username or password');
+        }
+      });
+  }
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -18,10 +43,18 @@ function LoginPage(props) {
     event.preventDefault();
     if (isLogin) {
       // perform login logic here
-      props.onLogin(username, password);
+      if (username === '' || password === '') {
+        alert('Username or password cannot be empty');
+        return;
+      }
+      handleLogin(username, password);
     } else {
       // perform register logic here
-      props.onRegister(username, password);
+      if (username === '' || password === '') {
+        alert('Username or password cannot be empty');
+        return;
+      }
+      handleRegister(username, password);
     }
   };
 

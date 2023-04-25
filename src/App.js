@@ -6,18 +6,16 @@ import './App.css';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  function handleLogin(username, password) {
+  function handleLogin(loginValid) {
     // Check the username and password against some predefined values
-    if (username === 'user' && password === 'password') {
+    if (loginValid) {
       setIsLoggedIn(true);
-    } else {
-      alert('Invalid username or password');
     }
   }
 
   return (
     <div className="App">
-      {isLoggedIn ? <MainPage /> : <Login onLogin={handleLogin} />}
+      {isLoggedIn ? <MainPage /> : <Login onLogin={handleLogin}/>}
     </div>
   );
 }
