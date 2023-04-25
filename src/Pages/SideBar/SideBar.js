@@ -1,19 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './SideBar.css';
 import Radio from '../../Components/Radio.js';
 
-function SideBar() {
+function SideBar({messages, setMessages, newButtons}) {
   const [buttonCount, setButtonCount] = useState(0);
 
   const handleNewButton = () => {
-    setButtonCount(buttonCount + 1);
+    // do something else
+    if (messages.length > 0){
+      setMessages([]);
+    }
   };
 
-  const newButtons = [];
-
-  for (let i = 0; i < buttonCount; i++) {
-    newButtons.push(<button key={i} className="my-button">Chat {i + 1}</button>);
-  }
+  useEffect(() => {
+    if (messages.length === 2){
+      setButtonCount(buttonCount + 1)
+      newButtons[1]([...newButtons[0], <button key={buttonCount} className="my-button">Chat {buttonCount + 1}</button>]);
+    } else if (messages.length === 1){
+      // do nothing
+    }
+  }, [messages.length]);
 
   return (
     <div className="sidebar">

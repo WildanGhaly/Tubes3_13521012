@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
 import TextInput from '../../Components/TextInput';
 import { getSelectedValue } from "../../Components/Radio";
+import SideBar from "../SideBar/SideBar";
 import './Contents.css';
 
-function Contents() {
-  const [messages, setMessages] = useState([]);
+function Contents({messages, setMessages}) {
+  // const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [beMessages, setBeMessages] = useState(""); // Backend messages
 
   useEffect(() => {
-    fetch(`http://localhost:8000/message/${getSelectedValue()}/${inputValue}`)
-      .then((res) => res.json())
-      .then((data) => setBeMessages(data.message));
+    if (inputValue !== ""){
+      fetch(`http://localhost:8000/message/${getSelectedValue()}/${inputValue}`)
+        .then((res) => res.json())
+        .then((data) => setBeMessages(data.message));
+    }
   }, [inputValue]);
 
   useEffect(() => {
