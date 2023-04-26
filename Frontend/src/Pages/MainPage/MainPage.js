@@ -9,11 +9,21 @@ function MainPage({username}) {
   const [currentChat, setCurrentChat] = useState('');
   const [buttonCount, setButtonCount] = useState(0);
   const [usernameLoaded, setUsernameLoaded] = useState(false);
-  const effectRun = useRef(false);
+  const effectRunUser = useRef(false);
+  const effectRunChat = useRef(false);
 
-  // Load newButtons from database
+  function loadMessages(chatMessagesArray) {
+    setCurrentChat(chatMessagesArray[0]);
+    setMessages([]);
+    setMessages(prevMessages => (
+      [...prevMessages].concat(chatMessagesArray.slice(1).map(([_, text], i) => (
+        { text: text, isUser: i % 2 === 0 }
+      )))
+    ));
+  }
+
   useEffect(() => {
-    if (!effectRun.current) {
+    if (!effectRunUser.current) {
       if (!usernameLoaded) {
         setUsernameLoaded(true);
         fetch(`http://localhost:8000/load/${username}`)
@@ -22,7 +32,11 @@ function MainPage({username}) {
             setButtonCount(data.message.length);
             setNewButtons(prevButtons => (
               [...prevButtons].concat(data.message.map(([text], i) => (
-                <button key={buttonCount + i} className="my-button">
+                <button
+                  key={buttonCount + i}
+                  className="my-button"
+                  onClick={() => loadMessages(data.message[i])} // change onClick handler
+                >
                   {text}
                 </button>
               )))
@@ -32,7 +46,7 @@ function MainPage({username}) {
     }
 
     return () => {
-      effectRun.current = true;
+      effectRunUser.current = true;
     };
   }, [usernameLoaded]);
 
