@@ -3,8 +3,8 @@ import './SideBar.css';
 import Radio from '../../Components/Radio.js';
 
 function SideBar(props) {
-  const { messages, setMessages, newButtons, currentChat, setCurrentChat, username } = props;
-  const [buttonCount, setButtonCount] = useState(0);
+  const { messages, setMessages, newButtons, setNewButtons, currentChat, setCurrentChat, username } = props;
+  const [buttonCount, setButtonCount] = useState(newButtons.length);
   const [isNewChat, setIsNewChat] = useState(true);
 
   const messagesRef = useRef(messages);
@@ -34,11 +34,17 @@ function SideBar(props) {
       setIsNewChat(true);
       isNewChatRef.current = true;
     } else if (messagesRef.current.length === 2 || messagesRef.current.length === 1) {
-      const newButtonCount = buttonCount + 1;
+      const newButtonCount = newButtons.length + 1;
       setCurrentChat('Chat' + newButtonCount);
       currentChatRef.current = 'Chat' + newButtonCount;
       setButtonCount(newButtonCount);
-      newButtons[1]([...newButtons[0], <button key={newButtonCount} className="my-button">Chat {newButtonCount}</button>]);
+      setNewButtons(prevButtons => (
+        [...prevButtons].concat(
+          <button key={newButtonCount} className="my-button">
+            Chat {newButtonCount}
+          </button>
+        )
+      ));
       setIsNewChat(false);
       isNewChatRef.current = false;
     } else {
@@ -51,9 +57,9 @@ function SideBar(props) {
       insertMessage(username, currentChatRef.current, messagesRef.current.length - 1, messagesRef.current[messagesRef.current.length - 2].text)
       insertMessage(username, currentChatRef.current, messagesRef.current.length, messagesRef.current[messagesRef.current.length - 1].text)
     } else {
-      console.log('no messages')
-      console.log(messagesRef.current.length)
-      console.log(!isNewChat)
+      // console.log('no messages')
+      // console.log(messagesRef.current.length)
+      // console.log(!isNewChat)
     }
 
   }, [messages]);

@@ -1,4 +1,4 @@
-const { con, insertUser, register, login, insertMessage } = require("./db");
+const { con, insertUser, register, login, insertMessage, load } = require("./db");
 
 const express = require("express");
 const cors = require("cors");
@@ -48,6 +48,24 @@ app.get("/insertMessage/:username/:chatName/:chatNumber/:messages", (req, res) =
   const { username, chatName, chatNumber, messages } = req.params;
   insertMessage(username, chatName, chatNumber, messages)
   res.json({ message: 'hello from insertMessage' })
+});
+
+app.get("/load/:username", (req, res) => {
+  const { username } = req.params;
+  console.log("Loading messages for ", username);
+  load(username)
+    .then(function(result) {
+      console.log(result)
+      console.log(result.length);
+      console.log(result[0][0]);
+      console.log(result[1][0]);
+      console.log(result[0].length);
+      console.log(result[1].length);
+      res.json({ message: result });
+    })
+    .catch(function(err) {
+      res.json({ message: [] });
+    });
 });
 
 app.get("/newchat/:messages", (req, res) => {

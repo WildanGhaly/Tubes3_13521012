@@ -60,6 +60,30 @@ function login (username, password) {
   });
 }
 
+function load(username) {
+  return new Promise((resolve, reject) => {
+    var sql = "SELECT * FROM messages WHERE Username = \"" + username + "\"";
+    con.query(sql, function (err, result) {
+      if (err) reject(err);
+      let chatNameMap = new Map();
+      result.forEach((row) => {
+        const chatName = row.chatName;
+        const message = [row.chatNumber, row.messages];
+        if (chatNameMap.has(chatName)) {
+          chatNameMap.get(chatName).push(message);
+        } else {
+          chatNameMap.set(chatName, [message]);
+        }
+      });
+      const messages = [];
+      for (let [chatName, messageList] of chatNameMap) {
+        messages.push([chatName, ...messageList]);
+      }
+      resolve(messages);
+    });
+  });
+}
+
 function insertMessage (username, chatName, chatNumber, messages) {
   var sql = "INSERT INTO messages (username, chatName, chatNumber, messages) VALUES (\"" + username + "\", \"" +  chatName + "\"," + chatNumber + ",\"" + messages + "\");"
   con.query(sql, function (err, result) {
@@ -68,4 +92,4 @@ function insertMessage (username, chatName, chatNumber, messages) {
   });
 }
 
-module.exports = { con, insertUser, register, login , insertMessage};
+module.exports = { con, insertUser, register, login , insertMessage, load};

@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState, useRef } from 'react'; 
 import MainPage from './Pages/MainPage/MainPage';
 import Login from './Pages/LoginPage/LoginPage';
 import './App.css';
 
-function App() {
+function App({}) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hasLoggedIn, setHasLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [currentUsername, setCurrentUsername] = useState("");
+  const effectRun = useRef(false);
 
   function handleLogin(loginValid) {
     // Check the username and password against some predefined values
@@ -15,9 +17,27 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    if (!effectRun.current && isLoggedIn) {
+      console.log('isLoggedIn: ', isLoggedIn);
+      console.log('hasLoggedIn: ', hasLoggedIn);
+      if (isLoggedIn && !hasLoggedIn) {
+        setHasLoggedIn(true);
+      }
+
+      return () => {
+        setHasLoggedIn(false);
+        effectRun.current = true;
+      }
+    }
+  }, [isLoggedIn]);
+
   return (
     <div className="App">
-      {isLoggedIn ? <MainPage username={currentUsername}/> : 
+      {isLoggedIn && hasLoggedIn ? 
+        <MainPage
+          username={currentUsername}
+        /> : 
         <Login 
           onLogin={handleLogin}
           username={username}
@@ -28,4 +48,4 @@ function App() {
   );
 }
 
-export default App;
+export default React.memo(App);
