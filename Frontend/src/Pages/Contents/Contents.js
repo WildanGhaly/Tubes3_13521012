@@ -1,21 +1,20 @@
 import { useState, useEffect } from "react";
 import TextInput from '../../Components/TextInput';
 import { getSelectedValue } from "../../Components/Radio";
-import SideBar from "../SideBar/SideBar";
 import './Contents.css';
 
-function Contents({messages, setMessages}) {
+function Contents({messages, setMessages, setIsSending}) {
   // const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [beMessages, setBeMessages] = useState(""); // Backend messages
 
-  useEffect(() => {
-    if (inputValue !== ""){
-      fetch(`http://localhost:8000/message/${getSelectedValue()}/${inputValue}`)
-        .then((res) => res.json())
-        .then((data) => setBeMessages(data.message));
-    }
-  }, [inputValue]);
+  function appendMessage(message) {
+    if (message === "") return;
+    setInputValue(message);
+    fetch(`http://localhost:8000/message/${getSelectedValue()}/${message}`)
+      .then((res) => res.json())
+      .then((data) => setBeMessages(data.message));
+  }
 
   useEffect(() => {
     if (beMessages !== "") {
@@ -25,8 +24,8 @@ function Contents({messages, setMessages}) {
   }, [beMessages]);
 
   function handleSend(message) {
-    setInputValue(message);
-    // setMessages([...messages, { text: message, isUser: true }]);
+    appendMessage(message);
+    setIsSending(true);
   }
 
   return (

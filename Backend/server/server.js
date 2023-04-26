@@ -56,11 +56,6 @@ app.get("/load/:username", (req, res) => {
   load(username)
     .then(function(result) {
       console.log(result)
-      console.log(result.length);
-      console.log(result[0][0]);
-      console.log(result[1][0]);
-      console.log(result[0].length);
-      console.log(result[1].length);
       res.json({ message: result });
     })
     .catch(function(err) {

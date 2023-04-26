@@ -9,10 +9,13 @@ function MainPage({username}) {
   const [currentChat, setCurrentChat] = useState('');
   const [buttonCount, setButtonCount] = useState(0);
   const [usernameLoaded, setUsernameLoaded] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+
   const effectRunUser = useRef(false);
   const effectRunChat = useRef(false);
 
   function loadMessages(chatMessagesArray) {
+    setIsSending(false);
     setCurrentChat(chatMessagesArray[0]);
     setMessages([]);
     setMessages(prevMessages => (
@@ -59,11 +62,14 @@ function MainPage({username}) {
         setNewButtons={setNewButtons}
         currentChat={currentChat}
         setCurrentChat={setCurrentChat}
-        username={username}>
+        username={username}
+        isSending={isSending}
+        setIsSending={setIsSending}>
       </SideBar>
       <Contents 
         messages={messages} 
-        setMessages={setMessages}>
+        setMessages={setMessages}
+        setIsSending={setIsSending}>
       </Contents>
     </div>
   );
