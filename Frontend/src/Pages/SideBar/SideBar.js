@@ -35,8 +35,8 @@ function SideBar(props) {
       isNewChatRef.current = true;
     } else if ((messagesRef.current.length === 2 || messagesRef.current.length === 1) && isSending) {
       const newButtonCount = newButtons.length + 1;
-      setCurrentChat('Chat' + newButtonCount);
-      currentChatRef.current = 'Chat' + newButtonCount;
+      setCurrentChat('Chat ' + newButtonCount);
+      currentChatRef.current = 'Chat ' + newButtonCount;
       setButtonCount(newButtonCount);
       setIsSending(false);
       setNewButtons(prevButtons => (

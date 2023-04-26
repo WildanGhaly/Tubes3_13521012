@@ -26,6 +26,30 @@ function MainPage({username}) {
   }
 
   useEffect(() => {
+    if (effectRunUser.current) {
+      return () => {
+        setNewButtons([]);
+        fetch(`http://localhost:8000/load/${username}`)
+          .then((res) => res.json())
+          .then((data) => {
+            setButtonCount(data.message.length);
+            setNewButtons(prevButtons => (
+              [...prevButtons].concat(data.message.map(([text], i) => (
+                <button
+                  key={buttonCount + i}
+                  className="my-button"
+                  onClick={() => loadMessages(data.message[i])} // change onClick handler
+                >
+                  {text}
+                </button>
+              )))
+            ));
+          });
+      };
+    };
+  }, [messages]);
+
+  useEffect(() => {
     if (!effectRunUser.current) {
       if (!usernameLoaded) {
         setUsernameLoaded(true);
