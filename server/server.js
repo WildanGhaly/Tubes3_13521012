@@ -1,4 +1,4 @@
-const { con, insertUser, register, login } = require("./db");
+const { con, insertUser, register, login, insertMessage } = require("./db");
 
 const express = require("express");
 const cors = require("cors");
@@ -33,9 +33,9 @@ app.get("/login/:username/:password", (req, res) => {
     .then(function(result) {
       console.log("Login result:", result.success);
       if (result.success) {
-        res.json({ success: true, message: `Login successful!` });
+        res.json({ success: true, message: `Login successful!`, username: username });
       } else {
-        res.json({ success: false, message: `Login failed!` });
+        res.json({ success: false, message: `Login failed!`, username: username });
       }
     })
     .catch(function(err) {
@@ -44,6 +44,20 @@ app.get("/login/:username/:password", (req, res) => {
     });
 });
 
+app.get("/insertMessage/:username/:chatName/:chatNumber/:messages", (req, res) => {
+  const { username, chatName, chatNumber, messages } = req.params;
+  insertMessage(username, chatName, chatNumber, messages)
+  res.json({ message: 'hello from insertMessage' })
+});
+
+app.get("/newchat/:messages", (req, res) => {
+  const { messages } = req.params;
+  if (messages.length() === 0){
+    res.json({ isEmpty: true });
+  } else {
+    res.json({ isEmpty: false });
+  }
+});
 
 app.listen(8000, () => {
   console.log(`Server is running on port 8000.`);

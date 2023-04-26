@@ -60,4 +60,12 @@ function login (username, password) {
   });
 }
 
-module.exports = { con, insertUser, register, login };
+function insertMessage (username, chatName, chatNumber, messages) {
+  var sql = "INSERT INTO messages (username, chatName, chatNumber, messages) VALUES (\"" + username + "\", \"" +  chatName + "," + chatNumber + ",\"" + messages + "\");"
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+}
+
+module.exports = { con, insertUser, register, login , insertMessage};

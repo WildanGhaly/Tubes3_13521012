@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './LoginPage.css';
 
 function LoginPage(props) {
+  const { username, setUsername, setCurrentUsername } = props;
   const [isLogin, setIsLogin] = useState(true);
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   function handleRegister(username, password) {
@@ -19,11 +19,13 @@ function LoginPage(props) {
   }
 
   function handleLogin(username, password) {
+    setCurrentUsername(username)
     fetch(`http://localhost:8000/login/${username}/${password}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
           alert('Login success');
+          setCurrentUsername(data.username)
           props.onLogin(true);
         } else {
           alert('Invalid username or password');
@@ -59,6 +61,7 @@ function LoginPage(props) {
   };
 
   const handleToggleLogin = () => {
+    console.log("Change")
     setIsLogin(!isLogin);
   };
 
