@@ -6,7 +6,7 @@ import "./MainPage.css";
 function MainPage({username}) {
   const [messages, setMessages] = useState([]);
   const newButtons = useState([]);
-  const [currentChat, setCurrentChat] = useState("");
+  const [currentChat, setCurrentChat] = useState('');
 
   return (
     <div className="container">
