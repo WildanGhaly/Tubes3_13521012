@@ -21,20 +21,25 @@ function Contents({messages, setMessages, setIsSending}) {
   }
 
   return (
-    <div className="content">
-      <TextInput onSend={handleSend} />
-      {messages.length > 0 && (
-        <div className="messages">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`message ${message.isUser ? "user-message" : "bot-message"}`}
-            >
-              {message.text}
-            </div>
-          ))}
-        </div>
-      )}
+    <div className='content-container'>
+      <div className="content">
+        <TextInput onSend={handleSend} />
+        {messages.length > 0 && (
+          <div className="messages">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`message ${message.isUser ? "user-message" : "bot-message"}`}
+              >
+                {message.text}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className='content-footer'></div>
+      <div className='content-right'></div>
+      <div className='content-left'></div>
     </div>
   );
 }

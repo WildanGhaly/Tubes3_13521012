@@ -66,13 +66,14 @@ function SideBar(props) {
   }, [messages]);
 
   return (
-    <div className="sidebar">
-      <div className="sidebar-content">
-        <button className={`my-button ${isNewChat ? "button-clicked" : "button-not-clicked"}`} onClick={handleNewButton}> + New Chat </button>
-        {newButtons}
+      <div className="sidebar">
+        <div className="sidebar-content">
+          <button className={`my-button ${isNewChat ? "button-clicked" : "button-not-clicked"}`} onClick={handleNewButton}> + New Chat </button>
+          {newButtons}
+        </div>
+        <div className="sidebar-footer"> </div>
+        <Radio></Radio>
       </div>
-      <Radio />
-    </div>
   );
 }
 
