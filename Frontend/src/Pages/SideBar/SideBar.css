@@ -29,3 +29,11 @@
 .my-button:hover {
     background-color: #303f9f;
 }
+
+.button-clicked {
+    background-color: #06c300;
+}
+
+.button-not-clicked {
+    background-color: #202123;
+}

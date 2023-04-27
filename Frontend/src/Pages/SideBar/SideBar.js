@@ -3,7 +3,7 @@ import './SideBar.css';
 import Radio from '../../Components/Radio.js';
 
 function SideBar(props) {
-  const { messages, setMessages, newButtons, setNewButtons, currentChat, setCurrentChat, username, isSending, setIsSending } = props;
+  const { messages, setMessages, newButtons, setNewButtons, currentChat, setCurrentChat, username, isSending, setIsSending, setActiveButtonIndex } = props;
   const [buttonCount, setButtonCount] = useState(newButtons.length);
   const [isNewChat, setIsNewChat] = useState(true);
 
@@ -36,12 +36,13 @@ function SideBar(props) {
     } else if ((messagesRef.current.length === 2 || messagesRef.current.length === 1) && isSending) {
       const newButtonCount = newButtons.length + 1;
       setCurrentChat('Chat ' + newButtonCount);
+      setActiveButtonIndex(newButtonCount - 1);
       currentChatRef.current = 'Chat ' + newButtonCount;
       setButtonCount(newButtonCount);
       setIsSending(false);
       setNewButtons(prevButtons => (
         [...prevButtons].concat(
-          <button key={newButtonCount} className="my-button">
+          <button key={newButtonCount} className="my-button button-clicked">
             Chat {newButtonCount}
           </button>
         )
@@ -68,7 +69,7 @@ function SideBar(props) {
   return (
     <div className="sidebar">
       <div className="sidebar-content">
-        <button className="my-button" onClick={handleNewButton}> + New Chat </button>
+        <button className={`my-button ${isNewChat ? "button-clicked" : "button-not-clicked"}`} onClick={handleNewButton}> + New Chat </button>
         {newButtons}
       </div>
       <Radio />

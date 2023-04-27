@@ -3,13 +3,14 @@ import Contents from "../Contents/Contents";
 import SideBar from "../SideBar/SideBar";
 import "./MainPage.css";
 
-function MainPage({username}) {
+function MainPage({ username }) {
   const [messages, setMessages] = useState([]);
   const [newButtons, setNewButtons] = useState([]);
   const [currentChat, setCurrentChat] = useState('');
   const [buttonCount, setButtonCount] = useState(0);
   const [usernameLoaded, setUsernameLoaded] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [activeButtonIndex, setActiveButtonIndex] = useState(null); // add state for active button index
 
   const effectRunUser = useRef(false);
   const effectRunChat = useRef(false);
@@ -27,27 +28,30 @@ function MainPage({username}) {
 
   useEffect(() => {
     if (effectRunUser.current) {
-      return () => {
-        setNewButtons([]);
-        fetch(`http://localhost:8000/load/${username}`)
-          .then((res) => res.json())
-          .then((data) => {
-            setButtonCount(data.message.length);
-            setNewButtons(prevButtons => (
-              [...prevButtons].concat(data.message.map(([text], i) => (
-                <button
-                  key={buttonCount + i}
-                  className="my-button"
-                  onClick={() => loadMessages(data.message[i])} // change onClick handler
-                >
-                  {text}
-                </button>
-              )))
-            ));
-          });
-      };
-    };
-  }, [messages]);
+      fetch(`http://localhost:8000/load/${username}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setNewButtons([]);
+          setButtonCount(data.message.length);
+          setNewButtons(prevButtons => (
+            [...prevButtons].concat(data.message.map(([text], i) => (
+              <button
+                key={i}
+                className={i === activeButtonIndex && messages.length !== 0 ? 'my-button button-clicked' : 'my-button'} // toggle class based on active button index
+                onClick={() => {
+                  loadMessages(data.message[i]);
+                  setActiveButtonIndex(i); // set the active button index when clicked
+                }}
+              >
+                {text}
+              </button>
+            )))
+          ));
+        });
+    } else {
+      effectRunUser.current = true;
+    }
+  }, [messages, activeButtonIndex]);
 
   useEffect(() => {
     if (!effectRunUser.current) {
@@ -60,7 +64,7 @@ function MainPage({username}) {
             setNewButtons(prevButtons => (
               [...prevButtons].concat(data.message.map(([text], i) => (
                 <button
-                  key={buttonCount + i}
+                  key={i}
                   className="my-button"
                   onClick={() => loadMessages(data.message[i])} // change onClick handler
                 >
@@ -88,7 +92,8 @@ function MainPage({username}) {
         setCurrentChat={setCurrentChat}
         username={username}
         isSending={isSending}
-        setIsSending={setIsSending}>
+        setIsSending={setIsSending}
+        setActiveButtonIndex={setActiveButtonIndex}>
       </SideBar>
       <Contents 
         messages={messages} 
