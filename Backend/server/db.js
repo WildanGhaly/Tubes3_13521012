@@ -1,21 +1,56 @@
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "a",
-  database: "tubes3_stima_user_password"
+  host      : "localhost",    // Change this to your MySQL host
+  user      : "root",         // Change this to your MySQL username
+  password  : "a",            // Change this to your MySQL password
 });
 
 con.connect(function(err) {
   if (err) throw err;
-  console.log("Connected!");
-  // var sql = "CREATE TABLE users (Username VARCHAR(255), Password VARCHAR(255))"; // create a table named "users" with two columns
-  // con.query(sql, function (err, result) {
-  //   if (err) throw err;
-  //   console.log("Table created");
+
+  // Check if database exists
+  con.query("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'tubes3_stima'", function (err, result, fields) {
+    if (err) throw err;
+
+    if (result.length === 0) {
+      // If the database does not exist, create it
+      con.query("CREATE DATABASE tubes3_stima", function (err, result) {
+        if (err) throw err;
+        console.log("Database created");
+
+        // Use the database
+        con.query("USE tubes3_stima", function (err, result) {
+          if (err) throw err;
+
+          // Create tables
+          con.query("CREATE TABLE users (Username VARCHAR(255), Password VARCHAR(255))", function (err, result) {
+            if (err) throw err;
+            console.log("Users table created");
+          });
+
+          con.query("CREATE TABLE messages (username VARCHAR(255), chatName VARCHAR(255), chatNumber INT, messages VARCHAR(1000))", function (err, result) {
+            if (err) throw err;
+            console.log("Messages table created");
+          });
+
+          con.query("CREATE TABLE questions (question VARCHAR(1000), answer VARCHAR(1000))", function (err, result) {
+            if (err) throw err;
+            console.log("Questions table created");
+          });
+        });
+      });
+    } else {
+      // If the database already exists, use it
+      con.query("USE tubes3_stima", function (err, result) {
+        if (err) throw err;
+
+        console.log("Database already exists");
+      });
+    }
   });
-// });
+}); 
+
 
 function insertUser(username, password) {
   var sql = "INSERT INTO users (Username, Password) VALUES (\"" + username + "\", \"" + password + "\")";
