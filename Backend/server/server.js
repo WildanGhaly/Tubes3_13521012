@@ -1,4 +1,6 @@
 const { con, insertUser, register, login, insertMessage, load } = require("./db");
+const { bm } = require("./Algorithm/bm");
+const { kmp } = require("./Algorithm/kmp");
 
 const express = require("express");
 const cors = require("cors");
@@ -8,8 +10,14 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/message/:variable1/:variable2", (req, res) => {
-    const { variable1, variable2 } = req.params;
+  const { variable1, variable2 } = req.params;
+  if (variable1 === "bm") {
+    res.json({ message: bm(variable2) });
+  } else if (variable1 === "kmp") {
+    res.json({ message: kmp(variable2) });
+  } else {
     res.json({ message: `Hello from server! You passed ${variable1} and ${variable2}` });
+  }
 });
 
 app.get("/register/:username/:password", (req, res) => {
