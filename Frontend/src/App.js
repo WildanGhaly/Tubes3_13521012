@@ -3,6 +3,7 @@ import MainPage from './Pages/MainPage/MainPage';
 import Login from './Pages/LoginPage/LoginPage';
 import './App.css';
 
+// eslint-disable-next-line no-empty-pattern
 function App({}) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [hasLoggedIn, setHasLoggedIn] = useState(false);
@@ -30,6 +31,7 @@ function App({}) {
         effectRun.current = true;
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
 
   return (

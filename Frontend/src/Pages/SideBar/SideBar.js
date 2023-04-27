@@ -4,7 +4,6 @@ import Radio from '../../Components/Radio.js';
 
 function SideBar(props) {
   const { messages, setMessages, newButtons, setNewButtons, currentChat, setCurrentChat, username, isSending, setIsSending, setActiveButtonIndex } = props;
-  const [buttonCount, setButtonCount] = useState(newButtons.length);
   const [isNewChat, setIsNewChat] = useState(true);
 
   const messagesRef = useRef(messages);
@@ -38,7 +37,6 @@ function SideBar(props) {
       setCurrentChat('Chat ' + newButtonCount);
       setActiveButtonIndex(newButtonCount - 1);
       currentChatRef.current = 'Chat ' + newButtonCount;
-      setButtonCount(newButtonCount);
       setIsSending(false);
       setNewButtons(prevButtons => (
         [...prevButtons].concat(
@@ -64,6 +62,7 @@ function SideBar(props) {
       // console.log(!isNewChat)
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
   return (

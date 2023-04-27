@@ -62,7 +62,7 @@ function login (username, password) {
 
 function load(username) {
   return new Promise((resolve, reject) => {
-    var sql = "SELECT * FROM messages WHERE Username = \"" + username + "\"";
+    var sql = "SELECT * FROM messages WHERE Username = \"" + username + "\" ORDER BY chatName, chatNumber ASC";
     con.query(sql, function (err, result) {
       if (err) reject(err);
       let chatNameMap = new Map();

@@ -7,13 +7,11 @@ function MainPage({ username }) {
   const [messages, setMessages] = useState([]);
   const [newButtons, setNewButtons] = useState([]);
   const [currentChat, setCurrentChat] = useState('');
-  const [buttonCount, setButtonCount] = useState(0);
   const [usernameLoaded, setUsernameLoaded] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [activeButtonIndex, setActiveButtonIndex] = useState(null); // add state for active button index
 
   const effectRunUser = useRef(false);
-  const effectRunChat = useRef(false);
 
   function loadMessages(chatMessagesArray) {
     setIsSending(false);
@@ -32,7 +30,6 @@ function MainPage({ username }) {
         .then((res) => res.json())
         .then((data) => {
           setNewButtons([]);
-          setButtonCount(data.message.length);
           setNewButtons(prevButtons => (
             [...prevButtons].concat(data.message.map(([text], i) => (
               <button
@@ -51,6 +48,7 @@ function MainPage({ username }) {
     } else {
       effectRunUser.current = true;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, activeButtonIndex]);
 
   useEffect(() => {
@@ -60,7 +58,6 @@ function MainPage({ username }) {
         fetch(`http://localhost:8000/load/${username}`)
           .then((res) => res.json())
           .then((data) => {
-            setButtonCount(data.message.length);
             setNewButtons(prevButtons => (
               [...prevButtons].concat(data.message.map(([text], i) => (
                 <button
@@ -79,6 +76,7 @@ function MainPage({ username }) {
     return () => {
       effectRunUser.current = true;
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [usernameLoaded]);
 
   return (

@@ -1,27 +1,19 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import TextInput from '../../Components/TextInput';
 import { getSelectedValue } from "../../Components/Radio";
 import './Contents.css';
 
 function Contents({messages, setMessages, setIsSending}) {
-  // const [messages, setMessages] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [beMessages, setBeMessages] = useState(""); // Backend messages
 
   function appendMessage(message) {
     if (message === "") return;
-    setInputValue(message);
     fetch(`http://localhost:8000/message/${getSelectedValue()}/${message}`)
       .then((res) => res.json())
-      .then((data) => setBeMessages(data.message));
+      .then((data) => setMessages([...messages, 
+                        { text: message, isUser: true }, 
+                        { text: data.message, isUser: false }
+                      ]));
   }
-
-  useEffect(() => {
-    if (beMessages !== "") {
-      setMessages([...messages, { text: inputValue, isUser: true }, { text: beMessages, isUser: false }]);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [beMessages]);
 
   function handleSend(message) {
     appendMessage(message);
