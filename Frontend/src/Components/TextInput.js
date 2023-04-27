@@ -15,6 +15,12 @@ function TextInput(props) {
     }
   }
 
+  function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      handleSend();
+    }
+  }
+
   return (
     <div className="user-text-input">
       <input
@@ -23,6 +29,7 @@ function TextInput(props) {
         placeholder="Enter your text here"
         value={inputValue}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
       />
       <label htmlFor="my-input" style={{ display: 'none' }}>
         Enter your text here
