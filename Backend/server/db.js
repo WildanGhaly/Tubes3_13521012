@@ -5,6 +5,7 @@ var con = mysql.createConnection({
   user      : "root",         // Change this to your MySQL username
   password  : "a",            // Change this to your MySQL password
 });
+export {con}
 
 con.connect(function(err) {
   if (err) throw err;
@@ -120,10 +121,17 @@ function load(username) {
 }
 
 function insertMessage (username, chatName, chatNumber, messages) {
-  var sql = "INSERT INTO messages (username, chatName, chatNumber, messages) VALUES (\"" + username + "\", \"" +  chatName + "\"," + chatNumber + ",\"" + messages + "\");"
+  var sql = "INSERT INTO messages (username, chatName, chatNumber, messages) VALUES (\"" + username + "\", \"" +  chatName + "\"," + chatNumber + ",\"" + messages + "\");";
   con.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record inserted");
+  });
+}
+
+function insertQuestions(question, answer){
+  con.query("INSERT INTO questions (question, answer) VALUES (\"" + question + "\", \"" + answer + "\");", function (err, result){
+    if(err) throw err;
+    console.log("1 Question inserted");
   });
 }
 
