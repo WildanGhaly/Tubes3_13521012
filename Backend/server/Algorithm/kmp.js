@@ -1,5 +1,4 @@
-import { con } from "../db.js";
-import "../db.js";
+const { con, insertUser, register, login, insertMessage, load } = require("../db");
 /**
  * @param {string} text
  * @param {string} pattern

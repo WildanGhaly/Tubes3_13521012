@@ -5,7 +5,6 @@ var con = mysql.createConnection({
   user      : "root",         // Change this to your MySQL username
   password  : "a",            // Change this to your MySQL password
 });
-export {con}
 
 con.connect(function(err) {
   if (err) throw err;
@@ -135,4 +134,4 @@ function insertQuestions(question, answer){
   });
 }
 
-module.exports = { con, insertUser, register, login , insertMessage, load};
+module.exports = { con, insertUser, register, login , insertMessage, insertQuestions, load};
