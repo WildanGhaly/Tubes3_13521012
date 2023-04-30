@@ -23,7 +23,7 @@ function kmp (text) {
         if(i == qResult.length){
             break;
         } else {
-            kmpMatch(text, qResult[i]);
+            validation = kmpMatch(text, qResult[i]);
         }
         i++;
     }
@@ -32,6 +32,7 @@ function kmp (text) {
     } else {
         con.query('SELECT answer FROM questions WHERE question = \"' + qResult[i] + '\"',function (err, aResult){
             if(err) throw err;
+            console.log(aResult);
             result = aResult;
         });
     }
