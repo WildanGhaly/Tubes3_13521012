@@ -134,4 +134,24 @@ function insertQuestions(question, answer){
   });
 }
 
-module.exports = { con, insertUser, register, login , insertMessage, insertQuestions, load};
+function getQuestions(){
+  return new Promise((resolve, reject) => {
+    var sql = "SELECT question FROM questions";
+    con.query(sql, function (err, result) {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+}
+
+function getAnswers(question){
+  return new Promise((resolve, reject) => {
+    var sql = "SELECT answer FROM questions WHERE question = \"" + question + "\"";
+    con.query(sql, function (err, result) {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+}
+
+module.exports = { con, insertUser, register, login , insertMessage, insertQuestions, load, getQuestions, getAnswers};

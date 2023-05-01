@@ -1,4 +1,4 @@
-const { con, insertUser, register, login, insertMessage, load } = require("../db");
+const { con, getQuestions, getAnswers } = require("../db");
 /**
  * @param {string} text
  * @param {string} pattern
@@ -8,35 +8,42 @@ const { con, insertUser, register, login, insertMessage, load } = require("../db
  * 
  * @todo Implementasi algoritma KMP
  * */
-function kmp (text) {
-    // TODO: implementasi algoritma KMP
-    var validation = -1;
-    var qResult = [];
-    var i = 0;
-    var result;
-    con.query('SELECT question FROM questions', function (err, qResult){
-        if (err) throw err;
-        console.log(qResult);
-    })
-    while (validation == -1) {
-        if(i == qResult.length){
-            break;
-        } else {
-            validation = kmpMatch(text, qResult[i]);
-        }
-        i++;
-    }
-    if (validation == -1){
-        return 'Maaf jawaban dari pertanyaan belum ada di database :( (KMP) '; 
-    } else {
-        con.query('SELECT answer FROM questions WHERE question = \"' + qResult[i] + '\"',function (err, aResult){
-            if(err) throw err;
-            console.log(aResult);
-            result = aResult;
+function kmp(text) {
+    return new Promise(function(resolve, reject) {
+        var validation = -1;
+        var qResult = [];
+        var i = -1;
+        var result;
+
+        getQuestions()
+            .then(function(result) {
+                qResult = result;
+                console.log(qResult);
+                do {
+                    i++;
+                    if(i == qResult.length){
+                        break;
+                    } else {
+                        validation = kmpMatch(text, qResult[i].question);
+                        console.log(validation);
+                    }
+                } while (validation == -1);
+
+                if (validation == -1){
+                    result = 'Maaf jawaban dari pertanyaan belum ada di database :( (KMP) '; 
+                    resolve(result); // resolve the result here
+                } else {
+                    getAnswers(qResult[i].question)
+                        .then(function(result) {
+                            result = result[0].answer;
+                            console.log(result + " (KMP)");
+                            resolve(result); // resolve the result here
+                    });
+                } 
         });
-    }
-    return result + " (KMP)";
+    });
 }
+
 /**
  * 
  * @param {String} text 

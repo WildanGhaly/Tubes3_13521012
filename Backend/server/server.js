@@ -14,7 +14,13 @@ app.get("/message/:variable1/:variable2", (req, res) => {
   if (variable1 === "bm") {
     res.json({ message: bm(variable2) });
   } else if (variable1 === "kmp") {
-    res.json({ message: kmp(variable2) });
+    kmp(variable2)
+      .then(function(result) {
+        res.json({ message: result });
+      })
+      .catch(function(err) {
+        res.json({ message: err });
+      });
   } else {
     res.json({ message: `Hello from server! You passed ${variable1} and ${variable2}` });
   }
@@ -63,7 +69,7 @@ app.get("/load/:username", (req, res) => {
   console.log("Loading messages for ", username);
   load(username)
     .then(function(result) {
-      console.log(result)
+      // console.log(result)
       res.json({ message: result });
     })
     .catch(function(err) {
