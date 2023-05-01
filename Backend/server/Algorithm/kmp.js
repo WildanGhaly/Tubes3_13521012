@@ -1,4 +1,6 @@
 const { con, getQuestions, getAnswers } = require("../db");
+const { calculateEquation } = require("./calculator");
+
 /**
  * @param {string} text
  * @param {string} pattern
@@ -36,6 +38,10 @@ function kmp(text) {
                     getAnswers(qResult[i].question)
                         .then(function(result) {
                             result = result[0].answer;
+                            result == "DATE" ? result = new Date().toLocaleDateString() : 
+                            result == "TIME" ? result = new Date().toLocaleTimeString() : 
+                            result == "CALC" ? result = calculateEquation(text) :
+                            result;
                             console.log(result + " (KMP)");
                             resolve(result); // resolve the result here
                     });

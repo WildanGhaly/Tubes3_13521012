@@ -85,3 +85,5 @@ function calculateEquation(equationString) {
 
   return result;
 }
+
+module.exports = { calculateEquation };
