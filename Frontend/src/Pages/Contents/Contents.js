@@ -7,7 +7,7 @@ function Contents({messages, setMessages, setIsSending}) {
 
   function appendMessage(message) {
     if (message === "") return;
-    fetch(`http://localhost:8000/message/${getSelectedValue()}/${message}`)
+    fetch(`http://localhost:8000/message/${getSelectedValue()}/${encodeURIComponent(message)}`)
       .then((res) => res.json())
       .then((data) => setMessages([...messages, 
                         { text: message, isUser: true }, 

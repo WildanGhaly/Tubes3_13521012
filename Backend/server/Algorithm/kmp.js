@@ -11,6 +11,8 @@ const { calculateEquation } = require("./calculator");
  * @todo Implementasi algoritma KMP
  * */
 function kmp(text) {
+    console.log("KMP");
+    console.log(text);
     return new Promise(function(resolve, reject) {
         var validation = -1;
         var qResult = [];
@@ -20,14 +22,14 @@ function kmp(text) {
         getQuestions()
             .then(function(result) {
                 qResult = result;
-                console.log(qResult);
+                // console.log(qResult);
                 do {
                     i++;
                     if(i == qResult.length){
                         break;
                     } else {
                         validation = kmpMatch(text, qResult[i].question);
-                        console.log(validation);
+                        // console.log(validation);
                     }
                 } while (validation == -1);
 
