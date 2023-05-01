@@ -1,96 +1,120 @@
-function calculateEquation(equationString) {
-    const validOperators = ['+', '-', '*', '/', '^'];
-    const validNumbers = /^[0-9]+(\.[0-9]+)?$/;
+function infixToPostfix(infix) {
+    const postfix = [];
+    const operatorStack = [];
   
-    const equation = equationString
-      .replace(/\s/g, '') // Remove all whitespace from the equation string
-      .replace(/^what(is)?/i, '') // Remove the starting question/statement
-      .replace(/\?+$/g, ''); // Remove the ending question marks
+    const precedence = {
+        '+': 1,
+        '-': 1,
+        '*': 2,
+        '&': 2,
+        '|': 2,
+        '/': 2,
+        '%': 2,
+        '^': 3,
+    };
   
-      const equationParts = equation.split(/([\+\-\*\/\^\(\)])/).filter(part => part !== ''); // Split the equation into parts (numbers, operators, and parentheses)
-  
-    let result = null;
-    let operator = null;
-    let operatorStack = [];
-    let numberStack = [];
-  
-    for (let i = 0; i < equationParts.length; i++) {
-        const part = equationParts[i];
-        console.log(equationParts);
-    
-        if (part === '(') {
-            // If the current part is an opening parenthesis, push the current operator and result to the stacks and reset them
-            operatorStack.push(operator);
-            numberStack.push(result);
-            operator = null;
-            result = null;
-        } else if (part === ')') {
-            // If the current part is a closing parenthesis, perform the operation in the parentheses and update the result
-            const number = numberStack.pop();
-            switch (operatorStack.pop()) {
-            case '+':
-                result += number;
-                break;
-            case '-':
-                result -= number;
-                break;
-            case '*':
-                result *= number;
-                break;
-            case '/':
-                result /= number;
-                break;
-            case '^':
-                result = Math.pow(result, number);
-                break;
+    infix.forEach((token) => {
+        if (isNumber(token)) {
+            postfix.push(token);
+        } else if (isOperator(token)) {
+            while (
+                operatorStack.length > 0 &&
+                operatorStack[operatorStack.length - 1] !== '(' &&
+                precedence[token] <= precedence[operatorStack[operatorStack.length - 1]]
+            ) {
+                postfix.push(operatorStack.pop());
             }
-        } else if (validNumbers.test(part)) {
-            // If the current part is a number
-            const number = parseFloat(part);
     
-            if (result === null) {
-                // If the result hasn't been initialized yet, set it to the current number
-                result = number;
-            } else if (operator !== null) {
-                // If an operator is defined, perform the operation with the current number and update the result
-                if ((operator === '*' || operator === '/') && (operatorStack[operatorStack.length - 1] === '+' || operatorStack[operatorStack.length - 1] === '-')) {
-                    // If the current operator has lower precedence than the previous operator on the stack, push the current operator and result to the stacks and reset them
-                    operatorStack.push(operator);
-                    numberStack.push(result);
-                    operator = null;
-                    result = number;
-                } else {
-                    switch (operator) {
-                        case '+':
-                            result += number;
-                            break;
-                        case '-':
-                            result -= number;
-                            break;
-                        case '*':
-                            result *= number;
-                            break;
-                        case '/':
-                            result /= number;
-                            break;
-                        case '^':
-                            result = Math.pow(result, number);
-                            break;
-                    }
-                }
+            operatorStack.push(token);
+        } else if (token === '(') {
+            operatorStack.push(token);
+        } else if (token === ')') {
+            while (operatorStack[operatorStack.length - 1] !== '(') {
+            postfix.push(operatorStack.pop());
             }
-        } else if (validOperators.includes(part)) {
-            // If the current part is an operator, update the operator
-            operator = part;
-        } else {
-            // If the current part is not a valid number, operator, or parenthesis, return an error
-            console.log('Error: Invalid equation');
-            console.log(part)
-            return 'Error: Invalid equation';
+    
+            operatorStack.pop(); // Pop the '('
         }
+    });
+  
+    while (operatorStack.length > 0) {
+        postfix.push(operatorStack.pop());
     }
-    
-    return result;
-}  
+  
+    return postfix;
+}
+
+function isNumber(char) {
+    return !isNaN(parseFloat(char));
+}
+  
+function isOperator(char) {
+    return ['+', '-', '*', '/','%','^','|','&'].includes(char);
+}
+  
+function evaluatePostfix(postfix) {
+    const stack = [];
+  
+    postfix.forEach((token) => {
+        if (isNumber(token)) {
+            stack.push(parseFloat(token));
+        } else if (isOperator(token)) {
+            const b = stack.pop();
+            const a = stack.pop();
+            const result = applyOperator(a, token, b);
+            stack.push(result);
+        } else {
+            throw new Error(`Unknown token: ${token}`);
+        }
+    });
+  
+    if (stack.length !== 1) {
+        throw new Error('Invalid postfix expression');
+    }
+  
+    return stack[0];
+}
+
+function applyOperator(a, operator, b) {
+    switch (operator) {
+        case '+':
+            return a + b;
+        case '-':
+            return a - b;
+        case '*':
+            return a * b;
+        case '/':
+            return a / b;
+        case '%':
+            return a % b;
+        case '&':
+            return a & b;
+        case '|':
+            return a | b;
+        case '^':
+            return Math.pow(a,b);
+        default:
+            throw new Error(`Unknown operator: ${operator}`);
+    }
+}
+
+function evaluateExpression(tokens) {
+    const postfix = infixToPostfix(tokens);
+    return evaluatePostfix(postfix);
+}
+
+function calculateEquation(equationString){
+    console.log(equationString);
+    const equation = equationString
+        .replace(/\s/g, '') 
+        .replace(/^what(is)?/i, '')
+        .replace(/\?+$/g, ''); 
+
+    const equationParts = equation.split(/([\+\-\*\/\^\\%\|\&\(\)])/).filter(part => part !== ''); 
+
+    const result = evaluateExpression(equationParts).toFixed(2); // Round the result to 2 decimal places
+    console.log(result);
+    return result.toString();
+}
 
 module.exports = { calculateEquation };
