@@ -20,7 +20,7 @@ function bm (text) {
         getQuestions()
                 .then(function(result) {
                     qResult = result;
-                    console.log(qResult);
+                    // console.log(qResult);
                     do {
                         i++;
                         if(i == qResult.length){
@@ -86,7 +86,7 @@ function makingTable(pattern, badSymbol, goodSuffix) {
     // badSymbol table
     for (let i = 0; i < m; i++) {
         badSymbol[pattern.charCodeAt(i)] = i;
-        console.log(badSymbol[pattern.charCodeAt(i)]);
+        // console.log(badSymbol[pattern.charCodeAt(i)]);
     }
     
     // goodSuffix table
