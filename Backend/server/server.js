@@ -12,7 +12,14 @@ app.use(express.json());
 app.get("/message/:variable1/:variable2", (req, res) => {
   const { variable1, variable2 } = req.params;
   if (variable1 === "bm") {
-    res.json({ message: bm(variable2) });
+    bm(variable2)
+      .then(function(result) {
+        res.json({ message: result });
+      })
+    .catch(function(err) {
+      res.json({ message: err });
+    });
+    // res.json({ message: bm(variable2) });
   } else if (variable1 === "kmp") {
     kmp(variable2)
       .then(function(result) {
