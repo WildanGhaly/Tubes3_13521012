@@ -1,6 +1,7 @@
 const { con, getQuestions, getAnswers, insertQuestions, updateAnswer, deleteQuestion } = require("../db");
 const { calculateEquation } = require("./calculator");
 const { getDayOfWeek } = require("./date");
+const { getSimilarity, levenshteinDistance } = require("./similarity");
 
 /**
  * @param {string} text
@@ -77,8 +78,42 @@ function kmp(text) {
                     } while (validation == -1);
 
                     if (validation == -1){
-                        result = 'Maaf jawaban dari pertanyaan belum ada di database :( (KMP) '; 
-                        resolve(result); // resolve the result here
+                        getSimilarity(text).then(function(result) {
+                            const similarStrings = result;
+                            // console.log(similarStrings);
+                            // console.log(similarStrings.length);
+                            // console.log("test");
+                            // console.log(similarStrings[0]);
+                            if (similarStrings.length == 0){
+                                result = 'Maaf jawaban dari pertanyaan belum ada di database :( (BM) '; 
+                                resolve(result); // resolve the result here
+                            } else {
+                                if (similarStrings[0].similarity >= 0.9) {
+                                    getAnswers(similarStrings[0].string)
+                                        .then(function(result) {
+                                            result = result[0].answer;
+                                            // result =
+                                            // // result == "DATE" ? new Date().toLocaleDateString() : 
+                                            // // result == "TIME" ? new Date().toLocaleTimeString() : 
+                                            // // result == "CALC" ? calculateEquation(text) :
+                                            // result;
+                                            console.log(result + " (BM)");
+                                            resolve(result); // resolve the result here
+                                    });
+                                }
+                                else {
+                                result = 'Apakah yang anda maksud adalah : ';
+                                for (let i = 0; i < 3; i++) {
+                                    result += "\n" + (i + 1) + ". " + similarStrings[i].string;
+                                } 
+                                resolve(result); // resolve the result here
+                            }
+                                
+                            }
+    
+                            });
+                        // result = 'Maaf jawaban dari pertanyaan belum ada di database :( (KMP) '; 
+                        // resolve(result); // resolve the result here
                     } else {
                         getAnswers(qResult[i].question)
                             .then(function(result) {
