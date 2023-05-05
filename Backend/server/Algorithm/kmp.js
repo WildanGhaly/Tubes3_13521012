@@ -15,6 +15,7 @@ function kmp(text) {
     console.log(text);
     const addQuestionRegex = /^tambahkan pertanyaan\s*(.+)\s*dengan jawaban\s*(.+)\s*$/i;
     const removeQuestionRegex = /^hapus pertanyaan\s*(.+)\s*$/i;
+    const mathExpressionRegex = /([\+\-\*\/\^\\%\|\&\(\)])/;
     if (addQuestionRegex.test(text)) {
         return new Promise(function(resolve, reject) {
             const matches = text.match(addQuestionRegex);
@@ -42,6 +43,10 @@ function kmp(text) {
                     resolve("Pertanyaan " + question + " telah dihapus");
                 }
             }); 
+        });
+    } else if (mathExpressionRegex.test(text)){
+        return new Promise(function(resolve, reject) {
+            resolve(calculateEquation(text));
         });
     } else {
         return new Promise(function(resolve, reject) {
