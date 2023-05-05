@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './LoginPage.css';
+import { backendCaller } from '../../BackendCaller';
 
 function LoginPage(props) {
   const { username, setUsername, setCurrentUsername } = props;
@@ -7,7 +8,7 @@ function LoginPage(props) {
   const [password, setPassword] = useState('');
 
   function handleRegister(username, password) {
-    fetch(`http://localhost:8000/register/${username}/${password}`)
+    fetch(`${backendCaller}/register/${username}/${password}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -20,7 +21,7 @@ function LoginPage(props) {
 
   function handleLogin(username, password) {
     setCurrentUsername(username)
-    fetch(`http://localhost:8000/login/${username}/${password}`)
+    fetch(`${backendCaller}/login/${username}/${password}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {

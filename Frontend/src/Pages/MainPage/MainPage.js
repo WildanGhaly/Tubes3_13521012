@@ -3,6 +3,7 @@ import Contents from "../Contents/Contents";
 import SideBar from "../SideBar/SideBar";
 import "./MainPage.css";
 import NewChat from '../../Components/NewChat';
+import { backendCaller } from '../../BackendCaller';
 
 function MainPage({ username }) {
   const [messages, setMessages] = useState([]);
@@ -28,7 +29,7 @@ function MainPage({ username }) {
 
   useEffect(() => {
     if (effectRunUser.current) {
-      fetch(`http://localhost:8000/load/${username}`)
+      fetch(`${backendCaller}/load/${username}`)
         .then((res) => res.json())
         .then((data) => {
           setNewButtons([]);
@@ -57,7 +58,7 @@ function MainPage({ username }) {
     if (!effectRunUser.current) {
       if (!usernameLoaded) {
         setUsernameLoaded(true);
-        fetch(`http://localhost:8000/load/${username}`)
+        fetch(`${backendCaller}/load/${username}`)
           .then((res) => res.json())
           .then((data) => {
             setNewButtons(prevButtons => (

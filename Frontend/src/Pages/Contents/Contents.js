@@ -2,13 +2,14 @@
 import TextInput from '../../Components/TextInput';
 import { getSelectedValue } from "../../Components/Radio";
 import './Contents.css';
+import { backendCaller } from '../../BackendCaller';
 
 function Contents({messages, setMessages, setIsSending}) {
 
   function appendMessage(message) {
     if (message === "") return;
     message = message.replace(/\n/g, "<br>");
-    fetch(`http://localhost:8000/message/${getSelectedValue()}/${encodeURIComponent(message)}`)
+    fetch(`${backendCaller}/message/${getSelectedValue()}/${encodeURIComponent(message)}`)
       .then((res) => res.json())
       .then((data) => setMessages([...messages, 
                         { text: message, isUser: true }, 
