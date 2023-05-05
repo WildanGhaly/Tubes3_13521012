@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import './SideBar.css';
 import Radio from '../../Components/Radio.js';
 import Delete from '../../Components/Delete';
+import { backendCaller } from '../../BackendCaller';
 
 function SideBar(props) {
   const { messages, setMessages, newButtons, setNewButtons, currentChat, setCurrentChat, username, isSending, setIsSending, setActiveButtonIndex, loadMessagesSignal, setLoadMessagesSignal } = props;
@@ -24,7 +25,7 @@ function SideBar(props) {
   };
 
   function insertMessage(username, chatName, chatNumber, messages) {
-    fetch(`http://localhost:8000/insertMessage/${encodeURIComponent(username)}/${encodeURIComponent(chatName)}/${encodeURIComponent(chatNumber)}/${encodeURIComponent(messages)}`)
+    fetch(`${backendCaller}/insertMessage/${encodeURIComponent(username)}/${encodeURIComponent(chatName)}/${encodeURIComponent(chatNumber)}/${encodeURIComponent(messages)}`)
       .then((res) => res.json())
       .then((data) => (data.message));
   }
