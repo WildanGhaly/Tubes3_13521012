@@ -49,7 +49,7 @@
     flex-direction: column;
     gap: 0px;
     color: white;
-    font-size: 20pt;
+    font-size: 14pt;
 }
   
 .message {
@@ -59,8 +59,8 @@
   
 .user-message {
     background-color: rgba(47, 45, 63, 0.858);
-    border-bottom: 1px whitesmoke solid;
-    border-top: 1px whitesmoke solid;
+    border-bottom: 0.1px rgba(245, 245, 245, 0.379) solid;
+    border-top: 0.1px rgba(245, 245, 245, 0.379) solid;
     color: #fff;
 }
   

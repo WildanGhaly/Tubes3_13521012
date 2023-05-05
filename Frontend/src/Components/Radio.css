@@ -30,6 +30,8 @@
   padding: 3px;
   color : #fff;
   text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;
+  transition: all 0.5s ease;
+  cursor: pointer;
 }
 
 .user-radio-button label:first-of-type {

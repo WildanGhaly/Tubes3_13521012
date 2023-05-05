@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Contents from "../Contents/Contents";
 import SideBar from "../SideBar/SideBar";
 import "./MainPage.css";
+import NewChat from '../../Components/NewChat';
 
 function MainPage({ username }) {
   const [messages, setMessages] = useState([]);
@@ -96,6 +97,11 @@ function MainPage({ username }) {
         loadMessagesSignal={loadMessagesSignal}
         setLoadMessagesSignal={setLoadMessagesSignal}>
       </SideBar>
+      {messages.length === 0 ? 
+        <NewChat 
+          messages={messages}
+          setMessages={setMessages}
+        ></NewChat> : null}
       <Contents 
         messages={messages} 
         setMessages={setMessages}
