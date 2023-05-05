@@ -45,10 +45,11 @@ button[type="submit"] {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: all 0.5s ease;
 }
 
 button[type="submit"]:hover {
-  background-color: #0069d9;
+  background-color: #00458f;
 }
 
 p {

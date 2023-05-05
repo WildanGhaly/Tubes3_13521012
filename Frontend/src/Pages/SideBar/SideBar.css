@@ -7,6 +7,7 @@
     transform-origin: left top;
     overflow-x: auto;
     overflow-y: scroll;
+    transition: all 0.3s ease;
 }
 
 .sidebar-content {
@@ -40,6 +41,7 @@
     margin: 12.5px;
     box-sizing: border-box;
     width: 291px;
+    transition: all 0.5s ease;
 }
 
 .my-button:hover {
