@@ -15,11 +15,11 @@
 .my-buttons {
     font-size: 14px;
     padding: 20px;
-    background-color: #202123;
+    background-color: #242a3877;
     color: #fff;
     border: 1px solid white;
     border-radius: 12.5px;
-    cursor: pointer;
+    cursor: auto;
     margin: 0px 12.5px;
     box-sizing: border-box;
     width: 291px;

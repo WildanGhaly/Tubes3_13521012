@@ -13,34 +13,33 @@ const { calculateEquation } = require("./calculator");
 function kmp(text) {
     console.log("KMP");
     console.log(text);
-    if (text.toLowerCase().search("tambahkan pertanyaan ")!=-1 && text.toLowerCase().search("dengan jawaban")!=-1){
+    const addQuestionRegex = /^tambahkan pertanyaan\s*(.+)\s*dengan jawaban\s*(.+)\s*$/i;
+    const removeQuestionRegex = /^hapus pertanyaan\s*(.+)\s*$/i;
+    if (addQuestionRegex.test(text)) {
         return new Promise(function(resolve, reject) {
-            var qResult;
-            const myArray = text.split("tambahkan pertanyaan ");
-            const array = myArray[1].split(" dengan jawaban ");
-            getAnswers(array[0]).then(function(result){
-                qResult = result;
-                if (qResult.length == 0){
-                    insertQuestions(array[0], array[1]);
-                    resolve("Pertanyaan " + array[0] + " telah ditambahkan (KMP)" );
+            const matches = text.match(addQuestionRegex);
+            const question = matches[1].toLowerCase().trim();
+            const answer = matches[2];
+            getAnswers(question).then(function(result){
+                if (result.length == 0){
+                    insertQuestions(question, answer);
+                    resolve("Pertanyaan " + question + " telah ditambahkan (KMP)" );
                 } else {
-                    updateAnswer(array[0], array[1]);
-                    resolve("Pertanyaan " + array[0] + " sudah ada! jawaban diupdate ke " + array[1]);
+                    updateAnswer(question, answer);
+                    resolve("Pertanyaan " + question + " sudah ada! jawaban diupdate ke " + answer);
                 }
             });
-
         });
-    } else if (text.toLowerCase().search("hapus pertanyaan")!=-1) {
+    } else if (removeQuestionRegex.test(text)) {
         return new Promise(function(resolve, reject) {
-            var qResult;
-            const array = text.split("hapus pertanyaan ");
-            getAnswers(array[1]).then(function(result){
-                qResult = result;
-                if (qResult.length == 0){
-                    resolve("Tidak ada pertanyaan " + array[1] + " pada database!");
+            const matches = text.match(removeQuestionRegex);
+            const question = matches[1].toLowerCase();
+            getAnswers(question).then(function(result){
+                if (result.length == 0){
+                    resolve("Tidak ada pertanyaan " + question + " pada database!");
                 } else {
-                    deleteQuestion(array[1]);
-                    resolve("Pertanyaan " + array[1] + " telah dihapus");
+                    deleteQuestion(question);
+                    resolve("Pertanyaan " + question + " telah dihapus");
                 }
             }); 
         });
@@ -60,7 +59,7 @@ function kmp(text) {
                         if(i == qResult.length){
                             break;
                         } else {
-                            validation = kmpMatch(text, qResult[i].question);
+                            validation = kmpMatch(text.toLowerCase(), qResult[i].question);
                             // console.log(validation);
                         }
                     } while (validation == -1);
