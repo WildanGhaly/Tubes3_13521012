@@ -1,10 +1,9 @@
-var mysql = require('mysql');
+require('dotenv').config()
+const mysql = require('mysql2')
 
-var con = mysql.createConnection({
-  host      : "localhost",    // Change this to your MySQL host
-  user      : "root",         // Change this to your MySQL username
-  password  : "a",            // Change this to your MySQL password
-});
+const con = mysql.createConnection('mysql://2jky2y9kclbkfry07yx3:pscale_pw_nj39aRSNP7o1PYE7CDvPXPkWNqDIlYYdpW5ZflK4Lp1@aws.connect.psdb.cloud/tubes3_stima?ssl={"rejectUnauthorized":true}')
+console.log('Connected to PlanetScale!')
+
 
 con.connect(function(err) {
   if (err) throw err;
