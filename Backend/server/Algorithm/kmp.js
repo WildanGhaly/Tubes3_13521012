@@ -66,7 +66,6 @@ function kmp(text) {
             getQuestions()
                 .then(function(result) {
                     qResult = result;
-                    console.log(qResult);
                     do {
                         i++;
                         if(i == qResult.length){

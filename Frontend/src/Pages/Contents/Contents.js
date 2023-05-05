@@ -7,13 +7,14 @@ function Contents({messages, setMessages, setIsSending}) {
 
   function appendMessage(message) {
     if (message === "") return;
+    message = message.replace(/\n/g, "<br>");
     fetch(`http://localhost:8000/message/${getSelectedValue()}/${encodeURIComponent(message)}`)
       .then((res) => res.json())
       .then((data) => setMessages([...messages, 
                         { text: message, isUser: true }, 
                         { text: data.message, isUser: false }
                       ]));
-  }
+  }  
 
   function handleSend(message) {
     appendMessage(message);
