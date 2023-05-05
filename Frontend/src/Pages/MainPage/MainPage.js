@@ -10,6 +10,7 @@ function MainPage({ username }) {
   const [usernameLoaded, setUsernameLoaded] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [activeButtonIndex, setActiveButtonIndex] = useState(null); // add state for active button index
+  const [loadMessagesSignal, setLoadMessagesSignal] = useState(false); // add state for load messages
 
   const effectRunUser = useRef(false);
 
@@ -49,7 +50,7 @@ function MainPage({ username }) {
       effectRunUser.current = true;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages, activeButtonIndex]);
+  }, [messages, activeButtonIndex, loadMessagesSignal]);
 
   useEffect(() => {
     if (!effectRunUser.current) {
@@ -91,7 +92,9 @@ function MainPage({ username }) {
         username={username}
         isSending={isSending}
         setIsSending={setIsSending}
-        setActiveButtonIndex={setActiveButtonIndex}>
+        setActiveButtonIndex={setActiveButtonIndex}
+        loadMessagesSignal={loadMessagesSignal}
+        setLoadMessagesSignal={setLoadMessagesSignal}>
       </SideBar>
       <Contents 
         messages={messages} 

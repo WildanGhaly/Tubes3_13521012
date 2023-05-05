@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import './SideBar.css';
 import Radio from '../../Components/Radio.js';
+import Delete from '../../Components/Delete';
 
 function SideBar(props) {
-  const { messages, setMessages, newButtons, setNewButtons, currentChat, setCurrentChat, username, isSending, setIsSending, setActiveButtonIndex } = props;
+  const { messages, setMessages, newButtons, setNewButtons, currentChat, setCurrentChat, username, isSending, setIsSending, setActiveButtonIndex, loadMessagesSignal, setLoadMessagesSignal } = props;
   const [isNewChat, setIsNewChat] = useState(true);
 
   const messagesRef = useRef(messages);
@@ -73,6 +74,12 @@ function SideBar(props) {
         </div>
         <div className="sidebar-footer"> </div>
         <Radio></Radio>
+        <Delete 
+          username = {username}
+          loadMessagesSignal = {loadMessagesSignal}
+          setLoadMessagesSignal = {setLoadMessagesSignal}
+          setMessages = {setMessages}>
+        </Delete>
       </div>
   );
 }

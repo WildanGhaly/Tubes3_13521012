@@ -93,6 +93,18 @@ app.get("/newchat/:messages", (req, res) => {
   }
 });
 
+app.get("/clearConversation/:username", (req, res) => {
+  const { username } = req.params;
+  con.query(`DELETE FROM messages WHERE username = '${username}'`, function(err, result) {
+    console.log(username);
+    if (err) {
+      res.json({ message: `Error clearing conversation!` });
+    } else {
+      res.json({ message: `Conversation cleared!` });
+    }
+  });
+});
+
 app.listen(8000, () => {
   console.log(`Server is running on port 8000.`);
 });
