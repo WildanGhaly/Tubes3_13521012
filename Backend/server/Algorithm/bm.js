@@ -134,7 +134,7 @@ function bm (text) {
 }
 }
     
-function bmMatch(pattern, question){
+function bmMatch(question, pattern){
     let m = pattern.length;
     let n = question.length;
 
