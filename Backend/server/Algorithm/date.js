@@ -20,11 +20,20 @@ function getDayInYear(year) {
 }
 
 function getDayOfWeek(dateString) {
-    const dateArr = dateString.split("/");
-    const day = parseInt(dateArr[0], 10);
+    const delimiter = dateString.includes('/') ? '/' : '-';
+    const dateArr = dateString.split(delimiter);
     const month = parseInt(dateArr[1], 10);
-    const year = parseInt(dateArr[2], 10);
-        
+    var year;
+    var day;
+
+    if (dateArr[0].length > 2) {
+        year = parseInt(dateArr[0], 10);
+        day = parseInt(dateArr[2], 10);
+    } else {
+        year = parseInt(dateArr[2], 10);
+        day = parseInt(dateArr[0], 10);
+    }
+
     /* Validasi */
     if (!isValidDate(day, month, year)) {
         return "Invalid Date";

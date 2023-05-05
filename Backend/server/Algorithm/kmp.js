@@ -1,5 +1,6 @@
 const { con, getQuestions, getAnswers, insertQuestions, updateAnswer, deleteQuestion } = require("../db");
 const { calculateEquation } = require("./calculator");
+const { getDayOfWeek } = require("./date");
 
 /**
  * @param {string} text
@@ -16,6 +17,9 @@ function kmp(text) {
     const addQuestionRegex = /^tambahkan pertanyaan\s*(.+)\s*dengan jawaban\s*(.+)\s*$/i;
     const removeQuestionRegex = /^hapus pertanyaan\s*(.+)\s*$/i;
     const mathExpressionRegex = /([\+\-\*\/\^\\%\|\&\(\)])/;
+    const dateExpressionRegex = /^((0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-\d{4})|((0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4})|(\d{4}\/(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2]))|(\d{4}-(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2]))$/
+                                   /*  dd-mm-yyyy  */                                 /*  dd/mm/yyyy  */                                   /* yyyy/mm/dd */                                    /* yyyy-mm-dd */
+
     if (addQuestionRegex.test(text)) {
         return new Promise(function(resolve, reject) {
             const matches = text.match(addQuestionRegex);
@@ -43,6 +47,10 @@ function kmp(text) {
                     resolve("Pertanyaan " + question + " telah dihapus");
                 }
             }); 
+        });
+    } else if (dateExpressionRegex.test(text)){
+        return new Promise(function(resolve, reject) {
+            resolve(getDayOfWeek(text));
         });
     } else if (mathExpressionRegex.test(text)){
         return new Promise(function(resolve, reject) {
