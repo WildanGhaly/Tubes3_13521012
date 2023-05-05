@@ -134,6 +134,20 @@ function insertQuestions(question, answer){
   });
 }
 
+function updateAnswer(question, answer){
+  con.query("UPDATE questions SET answer = \"" + answer + "\" WHERE question = \"" + question + "\";", function (err, result){
+    if(err) throw err;
+    console.log("1 Question updated");
+  });
+}
+
+function deleteQuestion(question){
+  con.query("DELETE FROM questions WHERE question = \"" + question + "\";", function(err, result){
+    if (err) throw err;
+    console.log("1 Question deleted");
+  });
+}
+
 function getQuestions(){
   return new Promise((resolve, reject) => {
     var sql = "SELECT question FROM questions";
@@ -154,4 +168,4 @@ function getAnswers(question){
   });
 }
 
-module.exports = { con, insertUser, register, login , insertMessage, insertQuestions, load, getQuestions, getAnswers};
+module.exports = { con, insertUser, register, login , insertMessage, insertQuestions, load, getQuestions, getAnswers, updateAnswer, deleteQuestion };

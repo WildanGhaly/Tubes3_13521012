@@ -1,4 +1,4 @@
-const { con, getQuestions, getAnswers } = require("../db");
+const { con, getQuestions, getAnswers, insertQuestions, updateAnswer, deleteQuestion } = require("../db");
 const { calculateEquation } = require("./calculator");
 
 /**
@@ -13,44 +13,77 @@ const { calculateEquation } = require("./calculator");
 function kmp(text) {
     console.log("KMP");
     console.log(text);
-    return new Promise(function(resolve, reject) {
-        var validation = -1;
-        var qResult = [];
-        var i = -1;
-        var result;
-
-        getQuestions()
-            .then(function(result) {
+    if (text.toLowerCase().search("tambahkan pertanyaan ")!=-1 && text.toLowerCase().search("dengan jawaban")!=-1){
+        return new Promise(function(resolve, reject) {
+            var qResult;
+            const myArray = text.split("tambahkan pertanyaan ");
+            const array = myArray[1].split(" dengan jawaban ");
+            getAnswers(array[0]).then(function(result){
                 qResult = result;
-                // console.log(qResult);
-                do {
-                    i++;
-                    if(i == qResult.length){
-                        break;
-                    } else {
-                        validation = kmpMatch(text, qResult[i].question);
-                        // console.log(validation);
-                    }
-                } while (validation == -1);
-
-                if (validation == -1){
-                    result = 'Maaf jawaban dari pertanyaan belum ada di database :( (KMP) '; 
-                    resolve(result); // resolve the result here
+                if (qResult.length == 0){
+                    insertQuestions(array[0], array[1]);
+                    resolve("Pertanyaan " + array[0] + " telah ditambahkan (KMP)" );
                 } else {
-                    getAnswers(qResult[i].question)
-                        .then(function(result) {
-                            result = result[0].answer;
-                            result =
-                            result == "DATE" ? new Date().toLocaleDateString() : 
-                            result == "TIME" ? new Date().toLocaleTimeString() : 
-                            result == "CALC" ? calculateEquation(text) :
-                            result;
-                            console.log(result + " (KMP)");
-                            resolve(result); // resolve the result here
-                    });
-                } 
+                    updateAnswer(array[0], array[1]);
+                    resolve("Pertanyaan " + array[0] + " sudah ada! jawaban diupdate ke " + array[1]);
+                }
+            });
+
         });
-    });
+    } else if (text.toLowerCase().search("hapus pertanyaan")!=-1) {
+        return new Promise(function(resolve, reject) {
+            var qResult;
+            const array = text.split("hapus pertanyaan ");
+            getAnswers(array[1]).then(function(result){
+                qResult = result;
+                if (qResult.length == 0){
+                    resolve("Tidak ada pertanyaan " + array[1] + " pada database!");
+                } else {
+                    deleteQuestion(array[1]);
+                    resolve("Pertanyaan " + array[1] + " telah dihapus");
+                }
+            }); 
+        });
+    } else {
+        return new Promise(function(resolve, reject) {
+            var validation = -1;
+            var qResult = [];
+            var i = -1;
+            var result;
+
+            getQuestions()
+                .then(function(result) {
+                    qResult = result;
+                    console.log(qResult);
+                    do {
+                        i++;
+                        if(i == qResult.length){
+                            break;
+                        } else {
+                            validation = kmpMatch(text, qResult[i].question);
+                            // console.log(validation);
+                        }
+                    } while (validation == -1);
+
+                    if (validation == -1){
+                        result = 'Maaf jawaban dari pertanyaan belum ada di database :( (KMP) '; 
+                        resolve(result); // resolve the result here
+                    } else {
+                        getAnswers(qResult[i].question)
+                            .then(function(result) {
+                                result = result[0].answer;
+                                result =
+                                result == "DATE" ? new Date().toLocaleDateString() : 
+                                result == "TIME" ? new Date().toLocaleTimeString() : 
+                                result == "CALC" ? calculateEquation(text) :
+                                result;
+                                console.log(result + " (KMP)");
+                                resolve(result); // resolve the result here
+                        });
+                    } 
+            });
+        });
+    }
 }
 
 /**
